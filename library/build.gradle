@@ -25,30 +25,30 @@ ext {
 }
 
 
-//// ./gradlew clean build generateRelease
+// ./gradlew clean build generateRelease
 //apply plugin: 'maven'
-//
-//def groupId = project.PUBLISH_GROUP_ID
-//def artifactId = project.PUBLISH_ARTIFACT_ID
-//def version = project.PUBLISH_VERSION
-//
-//def localReleaseDest = "file:///android/maven"
-//
-//task androidJavadocs(type: Javadoc) {
-//    source = android.sourceSets.main.java.srcDirs
-//    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-//}
-//
-//task androidJavadocsJar(type: Jar, dependsOn: androidJavadocs) {
-//    classifier = 'javadoc'
-//    from androidJavadocs.destinationDir
-//}
-//
-//task androidSourcesJar(type: Jar) {
-//    classifier = 'sources'
-//    from android.sourceSets.main.java.srcDirs
-//}
-//
+
+def groupId = project.PUBLISH_GROUP_ID
+def artifactId = project.PUBLISH_ARTIFACT_ID
+def version = project.PUBLISH_VERSION
+
+def localReleaseDest = "file:///android/maven"
+
+task androidJavadocs(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+}
+
+task androidJavadocsJar(type: Jar, dependsOn: androidJavadocs) {
+    classifier = 'javadoc'
+    from androidJavadocs.destinationDir
+}
+
+task androidSourcesJar(type: Jar) {
+    classifier = 'sources'
+    from android.sourceSets.main.java.srcDirs
+}
+
 //uploadArchives {
 //    repositories.mavenDeployer {
 //        pom.groupId = groupId
@@ -58,41 +58,31 @@ ext {
 //        repository(url: "file://${localReleaseDest}")
 //    }
 //}
-//
-//task zipRelease(type: Zip) {
-//    from localReleaseDest
-//    destinationDir buildDir
-//    archiveName "release-${version}.zip"
-//}
-//
-//task generateReleases << {
-//    println "Release ${version} can be found at ${localReleaseDest}/"
-//    println "Release ${version} zipped can be found ${buildDir}/release-${version}.zip"
-//}
-//
-//generateReleases.dependsOn(uploadArchives)
-//generateReleases.dependsOn(zipRelease)
-//
-//
-//artifacts {
-//    archives androidSourcesJar
-//    archives androidJavadocsJar
-//}
+
+task zipRelease(type: Zip) {
+    from localReleaseDest
+    destinationDir buildDir
+    archiveName "release-${version}.zip"
+}
+
+task generateReleases << {
+    println "Release ${version} can be found at ${localReleaseDest}/"
+    println "Release ${version} zipped can be found ${buildDir}/release-${version}.zip"
+}
+
+generateReleases.dependsOn(uploadArchives)
+generateReleases.dependsOn(zipRelease)
+
+
+artifacts {
+    archives androidSourcesJar
+    archives androidJavadocsJar
+}
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:25.3.1'
 }
-
-
-
-
-
-
-
-
-
-
 
 
 
