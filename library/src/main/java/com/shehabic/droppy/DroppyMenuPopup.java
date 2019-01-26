@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.graphics.Point;
+import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -52,13 +54,13 @@ public class DroppyMenuPopup {
     }
 
     protected DroppyMenuPopup(
-        Context mContext,
-        View parentMenuItem,
-        List<DroppyMenuItemInterface> menuItem,
-        DroppyClickCallbackInterface droppyClickCallbackInterface,
-        boolean addTriggerOnAnchorClick,
-        int popupMenuLayoutResourceId,
-        OnDismissCallback onDismissCallback
+            Context mContext,
+            View parentMenuItem,
+            List<DroppyMenuItemInterface> menuItem,
+            DroppyClickCallbackInterface droppyClickCallbackInterface,
+            boolean addTriggerOnAnchorClick,
+            int popupMenuLayoutResourceId,
+            OnDismissCallback onDismissCallback
     ) {
         this.mContext = mContext;
         this.anchor = parentMenuItem;
@@ -96,6 +98,8 @@ public class DroppyMenuPopup {
         lp.topMargin = 0;
         modalWindow = new FrameLayout(mContext);
         modalWindow.setClickable(true);
+        modalWindow.setFocusableInTouchMode(true);
+        modalWindow.requestFocus();
         modalWindow.setLayoutParams(lp);
         modalWindow.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,6 +107,19 @@ public class DroppyMenuPopup {
                 dismiss(false);
             }
         });
+
+        modalWindow.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
+                if (keyCode == KeyEvent.KEYCODE_BACK) {
+                    dismiss(false);
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        });
+
         lp.topMargin -= getActivity(mContext).getWindow().getDecorView().getTop();
         getActivity(mContext).getWindow().addContentView(modalWindow, lp);
     }
@@ -176,9 +193,11 @@ public class DroppyMenuPopup {
             mContentView = mPopupView;
             int i = 0;
             for (DroppyMenuItemInterface droppyMenuItem : this.menuItems) {
-                addMenuItemView(droppyMenuItem, i);
-                if (droppyMenuItem.isClickable()) {
-                    i++;
+                if (droppyMenuItem.isVisible()) {
+                    addMenuItemView(droppyMenuItem, i);
+                    if (droppyMenuItem.isClickable()) {
+                        i++;
+                    }
                 }
             }
         }
@@ -377,6 +396,8 @@ public class DroppyMenuPopup {
             for (int i = 0; i < menu.size(); i++) {
                 MenuItem mItem = menu.getItem(i);
                 DroppyMenuItem dMenuItem = new DroppyMenuItem(mItem.getTitle().toString());
+
+                dMenuItem.setVisible(mItem.isVisible());
 
                 if (mItem.getIcon() != null) {
                     dMenuItem.setIcon(mItem.getIcon());
