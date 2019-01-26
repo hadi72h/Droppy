@@ -131,7 +131,7 @@ public class DroppyMenuPopup {
                     dismiss(false);
                 }
 
-                return true;
+                return false;
             }
         });
 
