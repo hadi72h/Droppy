@@ -40,6 +40,7 @@ public class DroppyMenuPopup {
     protected int offsetX;
     protected int offsetY;
     protected DroppyAnimation popupAnimation;
+    private boolean backPressed;
 
     public void setOffsetY(int offsetY) {
         this.offsetY = offsetY;
@@ -98,25 +99,11 @@ public class DroppyMenuPopup {
         lp.topMargin = 0;
         modalWindow = new FrameLayout(mContext);
         modalWindow.setClickable(true);
-        modalWindow.setFocusableInTouchMode(true);
-        modalWindow.requestFocus();
         modalWindow.setLayoutParams(lp);
         modalWindow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dismiss(false);
-            }
-        });
-
-        modalWindow.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
-                if (keyCode == KeyEvent.KEYCODE_BACK) {
-                    dismiss(false);
-                    return true;
-                } else {
-                    return false;
-                }
             }
         });
 
@@ -133,7 +120,21 @@ public class DroppyMenuPopup {
         detachPopupView();
         ((ViewGroup) mContentView).addView(mPopupView);
         mContentView.setFocusable(true);
+        mContentView.setFocusableInTouchMode(true);
         mContentView.setClickable(true);
+
+        mContentView.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
+                if (keyCode == KeyEvent.KEYCODE_BACK && !backPressed) {
+                    backPressed = true;
+                    dismiss(false);
+                }
+
+                return true;
+            }
+        });
+
         getActivity(mContext).getWindow().addContentView(mContentView, lp);
         mContentView.requestFocus();
         if (popupAnimation != null) {
@@ -174,6 +175,17 @@ public class DroppyMenuPopup {
                 this.mOnDismissCallback = null;
             }
         }
+
+        mContext = null;
+        anchor = null;
+        menuItems = null;
+        mContentView = null;
+        mPopupView = null;
+        droppyMenuContainer = null;
+        droppyClickCallbackInterface = null;
+        modalWindow = null;
+        mOnDismissCallback = null;
+        popupAnimation = null;
     }
 
     protected void render() {
