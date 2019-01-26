@@ -20,6 +20,7 @@ public abstract class DroppyMenuItemAbstract implements DroppyMenuItemInterface 
     protected int customViewResourceId = -1;
     protected int id = -1;
     protected boolean isClickable = true;
+    protected boolean visible = true;
 
     @Override
     public View render(Context context) {
@@ -52,6 +53,13 @@ public abstract class DroppyMenuItemAbstract implements DroppyMenuItemInterface 
     }
 
     @Override
+    public DroppyMenuItemInterface setVisible(boolean visible) {
+        this.visible = visible;
+
+        return this;
+    }
+
+    @Override
     public int getId() {
         return id;
     }
@@ -59,6 +67,11 @@ public abstract class DroppyMenuItemAbstract implements DroppyMenuItemInterface 
     @Override
     public boolean isClickable() {
         return isClickable;
+    }
+
+    @Override
+    public boolean isVisible() {
+        return visible;
     }
 
     @Override

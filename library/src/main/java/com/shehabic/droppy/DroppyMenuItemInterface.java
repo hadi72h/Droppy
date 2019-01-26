@@ -33,6 +33,12 @@ public interface DroppyMenuItemInterface {
     DroppyMenuItemInterface setClickable(boolean isClickable);
 
     /**
+     * @param visible
+     * @return DroppyMenuItemInterface
+     */
+    DroppyMenuItemInterface setVisible(boolean visible);
+
+    /**
      * @return int
      */
     int getId();
@@ -41,6 +47,11 @@ public interface DroppyMenuItemInterface {
      * @return boolean
      */
     boolean isClickable();
+
+    /**
+     * @return boolean
+     */
+    boolean isVisible();
 
     /**
      * @return View
