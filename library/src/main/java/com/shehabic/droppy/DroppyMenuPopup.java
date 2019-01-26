@@ -128,7 +128,7 @@ public class DroppyMenuPopup {
             public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
                 if (keyCode == KeyEvent.KEYCODE_BACK && !backPressed) {
                     backPressed = true;
-                    dismiss(false);
+                    dismissPopup(false);
                 }
 
                 return false;
@@ -159,9 +159,9 @@ public class DroppyMenuPopup {
     public void dismiss(boolean itemSelected) {
         if (popupAnimation != null) {
             popupAnimation.animateHide(this, mPopupView, anchor, itemSelected);
-
             return;
         }
+
         dismissPopup(itemSelected);
     }
 
