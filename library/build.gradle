@@ -70,7 +70,7 @@ task generateReleases << {
     println "Release ${version} zipped can be found ${buildDir}/release-${version}.zip"
 }
 
-generateReleases.dependsOn(uploadArchives)
+//generateReleases.dependsOn(uploadArchives)
 generateReleases.dependsOn(zipRelease)
 
 
