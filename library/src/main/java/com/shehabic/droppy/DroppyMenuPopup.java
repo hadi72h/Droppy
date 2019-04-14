@@ -298,7 +298,7 @@ public class DroppyMenuPopup {
         }
 
         if ((finalY + mPopupHeight) > screen.y /*&& p.y > mPopupHeight*/) {
-            finalY = anchorPosition.y - mPopupHeight - (-1 * yOffset);
+            finalY = finalY - mPopupHeight - (-1 * yOffset);
         }
 
         params.leftMargin = Math.max(0, finalX);
